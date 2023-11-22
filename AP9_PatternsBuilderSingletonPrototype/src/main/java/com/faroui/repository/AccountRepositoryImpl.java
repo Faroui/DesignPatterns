@@ -13,6 +13,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class AccountRepositoryImpl implements AccountRepository{
+    private final static  AccountRepositoryImpl  accountRepository;
+
+    private AccountRepositoryImpl(){}
     private Map<Long,BankAccount>  bankAccountMap=new HashMap<>();
     private long accountsCount=0;
     @Override
@@ -62,5 +65,13 @@ public class AccountRepositoryImpl implements AccountRepository{
                     .build();
             save(account);
         }
+    }
+    public static AccountRepositoryImpl getInstance(){
+//        if(accountRepository==null){
+//            System.out.println("Singleton instantiation");
+//            accountRepository=new AccountRepositoryImpl();
+//            accountRepository.populateData();
+//        }
+        return accountRepository;
     }
 }
