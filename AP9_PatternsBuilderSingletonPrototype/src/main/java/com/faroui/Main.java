@@ -6,22 +6,25 @@ import com.faroui.model.BankAccount;
 import com.faroui.repository.AccountRepositoryImpl;
 import com.faroui.util.JsonSerializer;
 
+import java.io.IOException;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         JsonSerializer <BankAccount> bankAccountJsonSerializer=new JsonSerializer<>();
         AccountRepositoryImpl accountRepository=AccountRepositoryImpl.getInstance();
-        //accountRepository.populateData();
-        List<BankAccount> bankAccounts = accountRepository.searchAccounts(bankAccount -> bankAccount.getType().equals(AccountType.CURRENT_ACCOUNT));
+        for(int i=0;i<10;i++){
+            new Thread(() -> {
+                accountRepository.populateData();
+            }).start();
+        }
+        System.out.println("Tape a character" +
+                "");
+        System.in.read();
+        List<BankAccount> bankAccounts = accountRepository.findAll();
         bankAccounts.stream()
                 .map(bankAccountJsonSerializer::toJson)
                 .forEach(System.out::println);
-//        System.out.println("======================");
-//        BankAccount account=accountRepository.findById(1L).orElse(null);
-//        if(account!=null){
-//            System.out.println(bankAccountJsonSerializer.toJson(account));
-//        }
     }
 
 }
